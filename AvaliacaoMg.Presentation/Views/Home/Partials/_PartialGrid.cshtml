@@ -1,0 +1,81 @@
+﻿@model IEnumerable<AvaliacaoMg.Data.ViewModels.ClienteViewModel>
+
+@if (Model.Count() > 0)
+{
+        <div class="table-responsive">
+
+            <table class="table table-hover table-bordered">
+                <thead>
+                    <tr class="bg-light">
+                        <th>
+                            @Html.DisplayNameFor(model => model.Nome)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Cnpj)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Socios)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Cep)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Endereco)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Contatos)
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+
+
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Nome)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Cnpj)
+                            </td>
+                            <td>
+                                @foreach (var socio in item.Socios)
+                                {
+                                    <ul>
+                                        <li>@socio.Nome</li>
+                                    </ul>
+
+                                }
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Cep)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Endereco)
+                            </td>
+                            <td>
+                                @foreach (var contato in item.Contatos)
+                                {
+                                    <ul>
+                                        <li>(@contato.DDD) @contato.Numero / @contato.Email</li>
+                                    </ul>
+                                }
+                            </td>
+                            <td style="vertical-align:middle" class="text-center">
+                                <button type="button" onclick="EditarClienteGet(@item.IdCliente)" class="btn btn-success btn-sm">Editar</button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            <div id="source-button" class="btn btn-system btn-xs" style="display: none;">&lt; &gt;</div>
+        </div>
+
+}
+
+else
+{
+    <p class="text-danger">Não há clientes cadastrados!</p>
+}

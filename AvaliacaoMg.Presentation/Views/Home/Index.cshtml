@@ -1,0 +1,41 @@
+﻿@using AvaliacaoMg.Data.ViewModels;
+@model IEnumerable<ClienteViewModel>
+
+@{
+    ViewData["Title"] = "Home Page";
+
+    if (ViewContext.HttpContext.Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+    {
+        Layout = "";
+    }
+}
+
+<br />
+
+<div id="dataGrid">
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h2 class="panel-title">
+                <b>Clientes Cadastrados</b>
+            </h2>
+        </div>
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-md-12">
+                    <button type="button" onclick="IncluirClienteGet()" class="btn btn-primary btn-sm pull-right">Incluir</button>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <br />
+                    @Html.Partial("~/Views/Home/Partials/_PartialGrid.cshtml", Model)
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+@section scripts{
+    <script src="~/js/ViewScripts/Home/Index.js"></script>
+}

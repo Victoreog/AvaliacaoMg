@@ -1,0 +1,336 @@
+﻿@using AvaliacaoMg.Data.ViewModels
+
+@model AvaliacaoMg.Data.ViewModels.ClienteViewModel
+
+@{
+    Layout = "";
+}
+
+<br />
+@*@using (Html.BeginForm((string)ViewBag.Acao, "Home"))
+{*@
+
+<form id="formCadastrar" action="/Home/@((string)ViewBag.Acao)">
+    @Html.AntiForgeryToken()
+
+    @Html.HiddenFor(x => x.IdCliente)
+
+    <h4 class="text-danger">
+        @Html.ValidationSummary()
+    </h4>
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h2 class="panel-title">
+                <b>Cadastro do Cliente</b>
+            </h2>
+        </div>
+        <div class="panel-body ">
+
+            <div class="row">
+
+                <div class="col-md-6">
+                    <br />
+                    @*BLOCO1*@
+                    <div class="row">
+
+                        <div class="col-md-6">
+                            <div style="margin-bottom: 25px" class="input-group">
+                                <span class="input-group-addon"><i class="glyphicon glyphicon-briefcase"></i></span>
+                                @Html.EditorFor(model => model.Nome, new { htmlAttributes = new { @class = "form-control", placeholder = "Nome (PJ)" } })
+                                @*@Html.ValidationMessageFor(model => model.Nome, "", new { @class = "text-danger" })*@
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="section">
+                                <div style="margin-bottom: 25px" class="input-group">
+                                    <span class="input-group-addon"><i class="glyphicon glyphicon-briefcase"></i></span>
+                                    @Html.EditorFor(model => model.Cnpj, new { htmlAttributes = new { @class = "form-control", placeholder = "CNPJ" } })
+                                    @*@Html.ValidationMessageFor(model => model.Cnpj, "", new { @class = "text-danger" })*@
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    @*BLOCO 2*@
+                    <div class="row">
+
+                        <div class="col-md-4">
+                            <div class="section">
+                                <div style="margin-bottom: 25px" class="input-group">
+                                    <span class="input-group-addon"><i class="glyphicon glyphicon-home"></i></span>
+                                    @Html.EditorFor(model => model.Cep, new { htmlAttributes = new { @class = "form-control", placeholder = "CEP" } })
+                                    @*@Html.ValidationMessageFor(model => model.Cep, "", new { @class = "text-danger" })*@
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-8">
+                            <div class="section">
+                                <div style="margin-bottom: 25px" class="input-group">
+                                    <span class="input-group-addon"><i class="glyphicon glyphicon-home"></i></span>
+                                    @Html.EditorFor(model => model.Endereco, new { htmlAttributes = new { @class = "form-control", placeholder = "Endereço" } })
+                                    @*@Html.ValidationMessageFor(model => model.Endereco, "", new { @class = "text-danger" })*@
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="col-md-6">
+
+                    @*SOCIOS*@
+                    <div class="panel panel-info">
+                        <div class="panel-heading">
+                            <div class="row">
+                                <div class="col-md-9">
+                                    <h2 class="panel-title">
+                                        <b>Sócios</b>
+                                    </h2>
+                                </div>
+
+                                <div class="col-md-3 text-right">
+                                    <button id="btnAddSocio" class="btn btn-xs btn-info" type="button"><i class="glyphicon glyphicon-plus"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel-body" id="itemSocioContainer">
+
+                            @if (Model.Socios.Count>0)
+                            {
+                                for (int i = 0; i < Model.Socios.Count; i++)
+                                {
+                                    <div class="row itemSocio" id="@String.Concat("itemSocio", i)">
+
+                                        <div class="col-md-6">
+                                            <div class="section">
+                                                <div style="margin-bottom: 25px" class="input-group">
+                                                    <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                                                    @Html.EditorFor(model => model.Socios[i].Nome, new { htmlAttributes = new { @class = "form-control", placeholder = "Nome responsável" } })
+                                                    @*@Html.ValidationMessageFor(model => model.Socios[i].Nome, "", new { @class = "text-danger" })*@
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            <div class="section">
+                                                <div style="margin-bottom: 25px" class="input-group">
+                                                    <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                                                    @Html.EditorFor(model => model.Socios[i].Cpf, new { htmlAttributes = new { @class = "form-control", placeholder = "CPF" } })
+                                                    @*@Html.ValidationMessageFor(model => model.Socios[i].Cpf, "", new { @class = "text-danger" })*@
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-2">
+                                            <button type="button" class="btn btn-sm btn-danger" onclick="btn_removeSocio(this)"><i class="glyphicon glyphicon-minus"></i></button>
+                                        </div>
+
+                                    </div>
+                                }
+                            }
+                            else
+                            
+                            {
+                                <div class="row itemSocio" id="itemSocio0")">
+
+                                    <div class="col-md-6">
+                                        <div class="section">
+                                            <div style="margin-bottom: 25px" class="input-group">
+                                                @Html.ValidationMessage("Socios[0].Nome", "", new { @class = "text-danger" })
+                                                <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                                                @Html.Editor("Socios[0].Nome", new { htmlAttributes = new { @class = "form-control", placeholder = "Nome responsável" } })
+
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-4">
+                                        <div class="section">
+                                            <div style="margin-bottom: 25px" class="input-group">
+                                                <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                                                @Html.Editor("Socios[0].CPF", new { htmlAttributes = new { @class = "form-control", placeholder = "CPF" } })
+                                                @Html.ValidationMessage("Socios[0].CPF", "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-2">
+                                        <button type="button" class="btn btn-sm btn-danger" onclick="btn_removeSocio(this)"><i class="glyphicon glyphicon-minus"></i></button>
+                                    </div>
+
+                                </div>
+
+                            }
+
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+
+            <div class="row">
+
+                <div class="col-md-12">
+
+                    @*CONTATOS*@
+                    <div class="panel panel-warning">
+                        <div class="panel-heading">
+                            <div class="row">
+                                <div class="col-md-9">
+                                    <h2 class="panel-title">
+                                        <b>Contatos</b>
+                                    </h2>
+                                </div>
+
+                                <div class="col-md-3 text-right">
+                                    <button id="btnAddContato" class="btn btn-xs btn-warning" type="button"><i class="glyphicon glyphicon-plus"></i></button>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="panel-body" id="itemContatoContainer">
+
+
+                            @if (Model.Contatos.Count > 0)
+                            {
+                                for (int i = 0; i < Model.Contatos.Count; i++)
+                                {
+
+                                    <div class="row itemContato" id="@String.Concat("itemContato", i)">
+            
+                                        <div class="col-md-2">
+                                            <div class="section">
+                                                <div style="margin-bottom: 25px" class="input-group">
+
+                                                    <span class="input-group-addon"><i class="glyphicon glyphicon-phone-alt"></i></span>
+                                                    <select asp-for="@Model.Contatos[i].Tipo" asp-items="Html.GetEnumSelectList<Tipo>()" class="form-control"></select>
+
+                                                        @*@Html.EditorFor(model => model.Contatos[i].Tipo, new { htmlAttributes = new { @class = "form-control", placeholder = "Tipo" } })*@
+                                                        @*@Html.ValidationMessageFor(model => model.Contatos[i].Tipo, "", new { @class = "text-danger" })*@
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-2">
+                                            <div class="section">
+                                                <div style="margin-bottom: 25px" class="input-group">
+                                                    <span class="input-group-addon"><i class="glyphicon glyphicon-phone-alt"></i></span>
+                                                    @Html.EditorFor(model => model.Contatos[i].DDD, new { htmlAttributes = new { @class = "form-control", placeholder = "DDD" } })
+                                                    @*@Html.ValidationMessageFor(model => model.Contatos[i].DDD, "", new { @class = "text-danger" })*@
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-3">
+                                            <div class="section">
+                                                <div style="margin-bottom: 25px" class="input-group">
+                                                    <span class="input-group-addon"><i class="glyphicon glyphicon-phone-alt"></i></span>
+                                                    @Html.EditorFor(model => model.Contatos[i].Numero, new { htmlAttributes = new { @class = "form-control", placeholder = "Numero" } })
+                                                    @*@Html.ValidationMessageFor(model => model.Contatos[i].Numero, "", new { @class = "text-danger" })*@
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            <div class="section">
+                                                <div style="margin-bottom: 25px" class="input-group">
+                                                    <span class="input-group-addon"><i class="glyphicon glyphicon-envelope"></i></span>
+                                                    @Html.EditorFor(model => model.Contatos[i].Email, new { htmlAttributes = new { @class = "form-control", placeholder = "Email" } })
+                                                    @*@Html.ValidationMessageFor(model => model.Contatos[i].Email, "", new { @class = "text-danger" })*@
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-1">
+                                            <button class="btn btn-sm btn-danger" type="button" onclick="btn_removeContato(this)"><i class="glyphicon glyphicon-minus"></i></button>
+                                        </div>
+
+                                    </div>
+                                }
+                            }
+                            else
+                            {
+                                <div class="row itemContato" id="itemContato0")">
+                                    <div class="col-md-2">
+                                        <div class="section">
+                                            <div style="margin-bottom: 25px" class="input-group">
+                                                <span class="input-group-addon"><i class="glyphicon glyphicon-phone-alt"></i></span>
+                                                <select asp-items="Html.GetEnumSelectList<Tipo>()" name="Contatos[0].Tipo" id = "Contatos_0__Tipo"  class="form-control"></select>
+                                                @*@Html.Editor("Contatos[0].Tipo", new { htmlAttributes = new { id = "Contatos_0__Tipo", @class = "form-control", placeholder = "Tipo" } })*@
+                                                @*@Html.ValidationMessage("Contatos[0].Tipo", "", new { @class = "text-danger" })*@
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-2">
+                                        <div class="section">
+                                            <div style="margin-bottom: 25px" class="input-group">
+                                                <span class="input-group-addon"><i class="glyphicon glyphicon-phone-alt"></i></span>
+                                                @Html.Editor("Contatos[0].DDD", new { htmlAttributes = new { id = "Contatos_0__DDD", @class = "form-control", placeholder = "DDD" } })
+                                               @* @Html.ValidationMessage("Contatos[0].DDD", "", new { @class = "text-danger" })*@
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-3">
+                                        <div class="section">
+                                            <div style="margin-bottom: 25px" class="input-group">
+                                                <span class="input-group-addon"><i class="glyphicon glyphicon-phone-alt"></i></span>
+                                                @Html.Editor("Contatos[0].Numero", new { htmlAttributes = new { id = "Contatos_0__Numero", @class = "form-control", placeholder = "Numero" } })
+                                                @*@Html.ValidationMessage("Contatos[0].Numero", "", new { @class = "text-danger" })*@
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-4">
+                                        <div class="section">
+                                            <div style="margin-bottom: 25px" class="input-group">
+                                                <span class="input-group-addon"><i class="glyphicon glyphicon-envelope"></i></span>
+                                                @Html.Editor("Contatos[0].Email", new { htmlAttributes = new { id = "Contatos_0__Email", @class = "form-control", placeholder = "Email" } })
+                                                @*@Html.ValidationMessage("Contatos[0].Email", "", new { @class = "text-danger" })*@
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-1">
+                                        <button class="btn btn-sm btn-danger" type="button" onclick="btn_removeContato(this)"><i class="glyphicon glyphicon-minus"></i></button>
+                                    </div>
+                                </div>
+
+                            }
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="row">
+
+                <div class="col-md-6 text-left">
+                    <a href="javascript:void(0)" class="homeLink btn btn-default"><< Voltar</a>
+                </div>
+
+                <div class="col-md-6 text-right">
+                    <input type="button" onclick="CadastrarClientePost()" value="Cadastrar" class="btn btn-primary" />
+
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+</form>
+
+
+
